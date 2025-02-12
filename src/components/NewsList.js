@@ -30,10 +30,7 @@ function NewsList() {
       setLoading(true);
       setError(null);
       try {
-        const API_KEY = 'dd61bb994a1642b38a8d315a04b2fb37';
-        const response = await axios.get(
-          `https://newsapi.org/v2/top-headlines?country=us&category=${category}&apiKey=${API_KEY}`
-        );
+        const response = await axios.get(`/api/news?category=${category}`);
         
         if (response.data.articles) {
           setNews(response.data.articles);
