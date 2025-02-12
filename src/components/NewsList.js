@@ -30,12 +30,16 @@ function NewsList() {
       setLoading(true);
       setError(null);
       try {
-        // Use direct API call without protocol specification
         const API_KEY = '226c33eac1f97f3f8d4d337df2601c07';
+        // Always use direct API call
         const response = await axios.get(
-          process.env.NODE_ENV === 'development'
-            ? `https://gnews.io/api/v4/top-headlines?category=${category}&lang=en&country=us&apikey=${API_KEY}`
-            : `/api/news?category=${category}` // Use relative path in production
+          `https://gnews.io/api/v4/top-headlines?category=${category}&lang=en&country=us&apikey=${API_KEY}`,
+          {
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            }
+          }
         );
         
         if (response.data && response.data.articles) {
