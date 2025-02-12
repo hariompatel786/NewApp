@@ -20,6 +20,7 @@ import { useTheme } from '@mui/material/styles';
 function NewsList() {
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const { category = 'general' } = useParams();
@@ -27,15 +28,19 @@ function NewsList() {
   useEffect(() => {
     const fetchNews = async () => {
       setLoading(true);
+      setError(null);
       try {
-        const API_KEY = 'dd61bb994a1642b38a8d315a04b2fb37';
-        const response = await axios.get(
-          `https://gnews.io/api/v4/top-headlines?category=${category}&lang=en&country=us&apikey=YOUR_GNEWS_API_KEY`
-        );
-        setNews(response.data.articles);
-        setLoading(false);
+        const response = await axios.get(`/api/news?category=${category}`);
+        
+        if (response.data.articles) {
+          setNews(response.data.articles);
+        } else {
+          throw new Error('No articles found in response');
+        }
       } catch (error) {
         console.error('Error fetching news:', error);
+        setError(error.message);
+      } finally {
         setLoading(false);
       }
     };
@@ -61,6 +66,20 @@ function NewsList() {
         height: '80vh'
       }}>
         <CircularProgress size={60} thickness={4} sx={{ color: '#1a237e' }} />
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Box sx={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center',
+        height: '80vh',
+        color: 'error.main'
+      }}>
+        <Typography variant="h6">Error loading news: {error}</Typography>
       </Box>
     );
   }
