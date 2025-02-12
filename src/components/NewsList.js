@@ -30,9 +30,11 @@ function NewsList() {
       setLoading(true);
       setError(null);
       try {
-        const API_KEY = '226c33eac1f97f3f8d4d337df2601c07';
+        // Use proxy API in production, direct API in development
         const response = await axios.get(
-          `https://gnews.io/api/v4/top-headlines?category=${category}&lang=en&country=us&apikey=${API_KEY}`
+          process.env.NODE_ENV === 'production'
+            ? `/api/news?category=${category}`
+            : `https://gnews.io/api/v4/top-headlines?category=${category}&lang=en&country=us&apikey=226c33eac1f97f3f8d4d337df2601c07`
         );
         
         if (response.data.articles) {
