@@ -30,20 +30,35 @@ function NewsList() {
       setLoading(true);
       setError(null);
       try {
-        const baseUrl = process.env.NODE_ENV === 'production' 
-          ? 'https://new-app-4mzg.vercel.app'
-          : '';
+        console.log('Fetching news for category:', category); // Debug log
         
-        const response = await axios.get(`${baseUrl}/api/news?category=${category}`);
+        const response = await axios.get(`/api/news?category=${category}`, {
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          }
+        });
         
-        if (response.data.articles) {
+        console.log('Response received:', response.status); // Debug log
+        
+        if (response.data && response.data.articles) {
           setNews(response.data.articles);
         } else {
-          throw new Error('No articles found in response');
+          console.error('Invalid response format:', response.data); // Debug log
+          throw new Error('Invalid response format');
         }
       } catch (error) {
-        console.error('Error fetching news:', error);
-        setError(error.response?.data?.errors?.[0] || error.message || 'Failed to fetch news');
+        console.error('Error details:', {
+          message: error.message,
+          response: error.response?.data,
+          status: error.response?.status
+        });
+        setError(
+          error.response?.data?.details || 
+          error.response?.data?.error || 
+          error.message || 
+          'Failed to fetch news'
+        );
       } finally {
         setLoading(false);
       }
