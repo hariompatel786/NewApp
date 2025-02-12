@@ -9,10 +9,11 @@ const categories = [
   { label: 'General', value: 'general' },
   { label: 'Business', value: 'business' },
   { label: 'Technology', value: 'technology' },
-  { label: 'Sports', value: 'sports' },
   { label: 'Entertainment', value: 'entertainment' },
+  { label: 'Sports', value: 'sports' },
   { label: 'Science', value: 'science' },
-  { label: 'Health', value: 'health' }
+  { label: 'Health', value: 'health' },
+  { label: 'World', value: 'world' }
 ];
 
 function Navbar({ isDarkMode, toggleDarkMode }) {

@@ -30,9 +30,9 @@ function NewsList() {
       setLoading(true);
       setError(null);
       try {
-        const API_KEY = 'dd61bb994a1642b38a8d315a04b2fb37';
+        const API_KEY = '226c33eac1f97f3f8d4d337df2601c07';
         const response = await axios.get(
-          `https://newsapi.org/v2/top-headlines?country=us&category=${category}&apiKey=${API_KEY}`
+          `https://gnews.io/api/v4/top-headlines?category=${category}&lang=en&country=us&apikey=${API_KEY}`
         );
         
         if (response.data.articles) {
@@ -42,7 +42,7 @@ function NewsList() {
         }
       } catch (error) {
         console.error('Error fetching news:', error);
-        setError(error.message);
+        setError(error.response?.data?.errors?.[0] || error.message || 'Failed to fetch news');
       } finally {
         setLoading(false);
       }
@@ -58,6 +58,10 @@ function NewsList() {
   const formatDate = (dateString) => {
     const options = { month: 'short', day: 'numeric' };
     return new Date(dateString).toLocaleDateString('en-US', options);
+  };
+
+  const getImageUrl = (article) => {
+    return article.image || 'https://via.placeholder.com/400x200?text=News+Image';
   };
 
   if (loading) {
@@ -111,9 +115,15 @@ function NewsList() {
                 <CardMedia
                   component="img"
                   height={isMobile ? "180" : "200"}
-                  image={article.urlToImage || 'https://via.placeholder.com/300x200'}
+                  image={getImageUrl(article)}
                   alt={article.title}
-                  sx={{ objectFit: 'cover' }}
+                  sx={{ 
+                    objectFit: 'cover',
+                    backgroundColor: 'rgba(0,0,0,0.08)'
+                  }}
+                  onError={(e) => {
+                    e.target.src = 'https://via.placeholder.com/400x200?text=News+Image';
+                  }}
                 />
                 <CardContent sx={{ p: isMobile ? 2 : 2.5 }}>
                   <Box sx={{ mb: 1.5 }}>

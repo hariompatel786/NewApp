@@ -6,11 +6,11 @@ module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Methods', 'GET');
   
   const { category = 'general' } = req.query;
-  const API_KEY = 'dd61bb994a1642b38a8d315a04b2fb37';
+  const API_KEY = '226c33eac1f97f3f8d4d337df2601c07'; // Replace with your GNews API key
 
   try {
     const response = await axios.get(
-      `https://newsapi.org/v2/top-headlines?country=us&category=${category}&apiKey=${API_KEY}`
+      `https://gnews.io/api/v4/top-headlines?category=${category}&lang=en&country=us&apikey=${API_KEY}`
     );
     res.status(200).json(response.data);
   } catch (error) {
