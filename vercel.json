@@ -6,20 +6,14 @@
       "use": "@vercel/static-build"
     },
     {
-      "src": "api/**/*.js",
+      "src": "api/*.js",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
-      "headers": {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, OPTIONS, POST",
-        "Access-Control-Allow-Headers": "*"
-      },
-      "dest": "/api/$1",
-      "continue": true
+      "dest": "/api/$1"
     },
     {
       "src": "/(.*)",

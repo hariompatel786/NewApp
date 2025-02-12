@@ -30,21 +30,22 @@ function NewsList() {
       setLoading(true);
       setError(null);
       try {
-        console.log('Fetching news for category:', category); // Debug log
+        console.log('Fetching news for category:', category);
         
-        const response = await axios.get(`/api/news?category=${category}`, {
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          }
-        });
+        // Use direct API call in development, proxy in production
+        const API_KEY = '226c33eac1f97f3f8d4d337df2601c07';
+        const response = await axios.get(
+          process.env.NODE_ENV === 'development'
+            ? `https://gnews.io/api/v4/top-headlines?category=${category}&lang=en&country=us&apikey=${API_KEY}`
+            : `https://new-app-4mzg.vercel.app/api/news?category=${category}`
+        );
         
-        console.log('Response received:', response.status); // Debug log
+        console.log('Response received:', response.status);
         
         if (response.data && response.data.articles) {
           setNews(response.data.articles);
         } else {
-          console.error('Invalid response format:', response.data); // Debug log
+          console.error('Invalid response format:', response.data);
           throw new Error('Invalid response format');
         }
       } catch (error) {
