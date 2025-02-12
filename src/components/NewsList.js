@@ -31,7 +31,7 @@ function NewsList() {
       setError(null);
       try {
         const baseUrl = process.env.NODE_ENV === 'production' 
-          ? 'https://new-app-4mzg-git-main-patelhariom127gmailcoms-projects.vercel.app'
+          ? 'https://new-app-4mzg.vercel.app'
           : '';
         
         const response = await axios.get(`${baseUrl}/api/news?category=${category}`);
