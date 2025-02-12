@@ -30,12 +30,11 @@ function NewsList() {
       setLoading(true);
       setError(null);
       try {
-        // Use proxy API in production, direct API in development
-        const response = await axios.get(
-          process.env.NODE_ENV === 'production'
-            ? `/api/news?category=${category}`
-            : `https://gnews.io/api/v4/top-headlines?category=${category}&lang=en&country=us&apikey=226c33eac1f97f3f8d4d337df2601c07`
-        );
+        const baseUrl = process.env.NODE_ENV === 'production' 
+          ? 'https://your-vercel-app-url.vercel.app'  // Replace with your actual Vercel URL
+          : '';
+        
+        const response = await axios.get(`${baseUrl}/api/news?category=${category}`);
         
         if (response.data.articles) {
           setNews(response.data.articles);
