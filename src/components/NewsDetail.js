@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { 
   Container, 
   Typography, 
@@ -43,6 +43,10 @@ function NewsDetail() {
     return new Date(dateString).toLocaleDateString('en-US', options);
   };
 
+  const getImageUrl = (article) => {
+    return article?.image || 'https://via.placeholder.com/800x400?text=News+Image';
+  };
+
   if (!article) {
     return (
       <Box sx={{ 
@@ -65,9 +69,15 @@ function NewsDetail() {
         <CardMedia
           component="img"
           height={isMobile ? "300" : "500"}
-          image={article.urlToImage || 'https://via.placeholder.com/600x400'}
+          image={getImageUrl(article)}
           alt={article.title}
-          sx={{ objectFit: 'cover' }}
+          sx={{ 
+            objectFit: 'cover',
+            backgroundColor: 'rgba(0,0,0,0.08)'
+          }}
+          onError={(e) => {
+            e.target.src = 'https://via.placeholder.com/800x400?text=News+Image';
+          }}
         />
         <CardContent sx={{ p: isMobile ? 2.5 : 4 }}>
           <Box sx={{ mb: isMobile ? 2 : 3 }}>
@@ -113,7 +123,13 @@ function NewsDetail() {
               mb: isMobile ? 3 : 4
             }}
           >
-            {article.content}
+            {article.description}
+            {article.content && (
+              <>
+                <br /><br />
+                {article.content}
+              </>
+            )}
           </Typography>
           
           <Button
