@@ -1,4 +1,5 @@
 const axios = require('axios');
+const https = require('https');
 
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -9,7 +10,12 @@ module.exports = async (req, res) => {
 
   try {
     const response = await axios.get(
-      `https://gnews.io/api/v4/top-headlines?category=${category}&lang=en&country=us&apikey=${API_KEY}`
+      `https://gnews.io/api/v4/top-headlines?category=${category}&lang=en&country=us&apikey=${API_KEY}`,
+      {
+        httpsAgent: new https.Agent({
+          rejectUnauthorized: false
+        })
+      }
     );
     res.json(response.data);
   } catch (error) {

@@ -30,32 +30,22 @@ function NewsList() {
       setLoading(true);
       setError(null);
       try {
-        console.log('Fetching news for category:', category);
-        
-        // Use direct API call in development, proxy in production
+        // Use direct API call without protocol specification
         const API_KEY = '226c33eac1f97f3f8d4d337df2601c07';
         const response = await axios.get(
           process.env.NODE_ENV === 'development'
             ? `https://gnews.io/api/v4/top-headlines?category=${category}&lang=en&country=us&apikey=${API_KEY}`
-            : `https://new-app-4mzg.vercel.app/api/news?category=${category}`
+            : `/api/news?category=${category}` // Use relative path in production
         );
-        
-        console.log('Response received:', response.status);
         
         if (response.data && response.data.articles) {
           setNews(response.data.articles);
         } else {
-          console.error('Invalid response format:', response.data);
           throw new Error('Invalid response format');
         }
       } catch (error) {
-        console.error('Error details:', {
-          message: error.message,
-          response: error.response?.data,
-          status: error.response?.status
-        });
+        console.error('Error details:', error);
         setError(
-          error.response?.data?.details || 
           error.response?.data?.error || 
           error.message || 
           'Failed to fetch news'
